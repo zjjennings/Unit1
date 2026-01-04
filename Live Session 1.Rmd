@@ -1,0 +1,84 @@
+---
+title: "For Live Session 1"
+author: "Zachary Jennings"
+date: "2026-01-02"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Scientist Profile
+
+```{r profile}
+cat <- c("Data\nViz","ML","Math","Stats","Comp\nSci","Comm","Domain\nExpertise")
+
+ratings <- c(80, 10, 60, 50, 30, 90, 90)
+par(las=1)
+barplot(ratings, names.arg= cat,
+        main = "Data Scientist Profile",
+        col = "skyblue",
+        ylim=c(0,100),
+        yaxt="n",
+        space=2)
+```
+
+# CLT
+
+## Generate Chi Sq distribution for Population of 10M with 2 df
+```{r population}
+population = rchisq(10000000,2)
+```
+
+## Generate histogram of population to show skewness
+
+```{r}
+hist(population, col = "skyblue")
+```
+
+## Record mean and sd of population
+
+```{r}
+mean(population)
+sd(population)
+```
+
+#### CLT suggests taking sample means of sample size 50 should produce a normal distribution of sample means
+
+#### The means should approximate mu and the standard deviation should equal s/ sq rt of 'n'
+
+#### Calculate 10,000 samples of size 50 from population with histogram of sample means
+```{r}
+simulations = 10000 #number of iterations
+sample_size = 50    #sample size of each iteration
+
+xBarVec = c() #global vector to hold sample means
+
+#loop to instantiate xBarVec means for simulation
+for (i in 1:simulations) {
+  sample1 = sample(population, sample_size)
+  xbar = mean(sample1)
+  xBarVec = c(xBarVec, xbar)
+}
+
+#histogram of distribution of sample means
+hist(xBarVec, col = "blue", 
+     main = "Distribution of Sample Means",
+     xlab = "x-Bar")
+
+#display standard error of distribution of sample means
+sd(xBarVec)
+```
+
+## Conduct hypothesis test for Beach Comber dataset
+
+```{r beachcomber_hypothesis_test}
+#?t.test #learn more about t-test function usage
+
+ages = c(25,19,37,29,40,28,31) #vector containing ages of patrons
+
+t.test(ages,mu=21, conf.level=0.95) #t.test of ages vector with Ho -> mu=21 at alpha=0.05
+```
