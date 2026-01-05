@@ -82,3 +82,52 @@ ages = c(25,19,37,29,40,28,31) #vector containing ages of patrons
 
 t.test(ages,mu=21, conf.level=0.95) #t.test of ages vector with Ho -> mu=21 at alpha=0.05
 ```
+
+## Draw curve and identify critical values and test statistic
+
+```{r t-distribution}
+library(glue)
+result <- t.test(ages, mu=21)        #store t-test 
+
+#create variables for plotting
+df <- result$parameter
+alpha = 0.05
+crit_low <- qt(alpha/2,df)
+crit_high <- qt(1-alpha/2,df)
+stat <- result$statistic
+pvalue <-result$p.value
+
+# create x values for plot
+x <- seq(-4,4, length.out = 1000)
+
+#create density of t-distribution with df degrees of freedom
+y <- dt(x, df)
+
+# plot t-dist
+plot(x,y,
+     type = "l",
+     lwd = 2,
+     main = "T-distribution and Test Statistic",
+     ylab = "Density",
+     xlab = "T-Value")
+
+#add vertical lines to show critical values and test statistic
+abline(v = crit_low, col = "red", lty = 2)    #vertical red dash for low critical value
+abline(v = crit_high, col = "red", lty = 2)   #vertical red dash for high critical value
+abline(v = stat, col = "blue", lty = 1)       #vertical blue solid for test statistic
+
+#add legend
+legend("topleft", legend = c("Critical Values","Test Statistic"),
+       col = c("red","blue"),
+       lwd = c(2,2),
+       lty = c(2,1),
+       pch = c(NA,NA))
+
+#add text of p-value
+text(x= stat,
+     y = dt(stat,df)+0.02,
+     labels = glue("p = {pvalue}"),
+     col = "blue")
+
+?text
+```
